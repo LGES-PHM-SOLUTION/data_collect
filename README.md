@@ -13,18 +13,19 @@ df = load_sensor_data("raw/sensor", "EQP01", "2026-11-10", "2026-11-10 23:59:59"
 
 ## 0. 빠른 시작 (처음 받는 사용자)
 
-준비물: **Git**, **Python 3.10 이상**, 사내 GitHub 계정과
+준비물: **Git**, **Python 3.10 이상**, GitHub(github.com) 계정과
 **개인 액세스 토큰(PAT)** (GitHub → Settings → Developer settings → Personal access tokens),
 MinIO 접속 정보(관리자에게 요청)
 
-> `git clone` 중 `Password`를 물으면 GitHub 비밀번호가 아니라 **PAT**를 입력합니다.
+> 비공개 저장소라면 `LGES-PHM-SOLUTION` 조직의 접근 권한이 필요하며, `git clone` 중 `Password`를
+> 물으면 GitHub 비밀번호가 아니라 **PAT**를 입력합니다.
 
 ### Linux / macOS (터미널)
 
 ```bash
 # 1) 내려받기
-git clone https://github.lgensol.com/jun-h-hong/data_processing.git
-cd data_processing
+git clone https://github.com/LGES-PHM-SOLUTION/data_collect.git
+cd data_collect
 
 # 2) 가상환경 + 패키지 설치
 python3 -m venv .venv
@@ -43,8 +44,8 @@ python -c "from data_loader import load_sensor_data; print('OK')"
 
 ```bat
 :: 1) 내려받기
-git clone https://github.lgensol.com/jun-h-hong/data_processing.git
-cd data_processing
+git clone https://github.com/LGES-PHM-SOLUTION/data_collect.git
+cd data_collect
 
 :: 2) 가상환경 + 패키지 설치
 python -m venv .venv
@@ -65,7 +66,7 @@ python -c "from data_loader import load_sensor_data; print('OK')"
 ### 최신 코드로 업데이트
 
 ```bash
-cd data_processing
+cd data_collect
 git pull
 ```
 
@@ -77,7 +78,7 @@ git pull
 
 ```python
 import sys
-sys.path.append("/path/to/data_processing")   # Windows: r"C:\path\to\data_processing"
+sys.path.append("/path/to/data_collect")   # Windows: r"C:\path\to\data_collect"
 
 from data_loader import load_sensor_data
 ```
