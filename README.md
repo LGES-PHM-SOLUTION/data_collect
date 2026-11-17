@@ -33,7 +33,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 
 # 3) 접속 정보 설정 → 편집기로 열어 실제 값 입력
-cp .env.example .env
+cp .env .env
 vi .env
 
 # 4) 동작 확인
@@ -107,11 +107,11 @@ pip install -r requirements-gpu.txt      # requirements.txt + cudf-cu12
 
 ## 2. MinIO 접속 설정 (`.env`)
 
-`.env.example`을 복사해 `.env`를 만들고 실제 값을 채웁니다.
+`.env`을 복사해 `.env`를 만들고 실제 값을 채웁니다.
 `.env`는 `.gitignore`에 등록되어 있으므로 **절대 커밋되지 않습니다.**
 
 ```bash
-cp .env.example .env                     # Windows cmd: copy .env.example .env
+cp .env .env                     # Windows cmd: copy .env .env
 ```
 
 | 변수 | 필수 | 설명 |

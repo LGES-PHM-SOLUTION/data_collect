@@ -201,6 +201,8 @@ def _read_parquet(path: Path) -> pd.DataFrame:
 
         ) from exc
  
+ 
+ 
     with tempfile.NamedTemporaryFile(suffix=".parquet") as decompressed:
 
         with path.open("rb") as compressed:
