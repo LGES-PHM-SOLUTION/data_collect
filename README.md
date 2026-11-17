@@ -11,17 +11,94 @@ df = load_sensor_data("raw/sensor", "EQP01", "2026-11-10", "2026-11-10 23:59:59"
 
 ---
 
+## 0. 빠른 시작 (처음 받는 사용자)
+
+준비물: **Git**, **Python 3.10 이상**, 사내 GitHub 계정과
+**개인 액세스 토큰(PAT)** (GitHub → Settings → Developer settings → Personal access tokens),
+MinIO 접속 정보(관리자에게 요청)
+
+> `git clone` 중 `Password`를 물으면 GitHub 비밀번호가 아니라 **PAT**를 입력합니다.
+
+### Linux / macOS (터미널)
+
+```bash
+# 1) 내려받기
+git clone https://github.lgensol.com/jun-h-hong/data_processing.git
+cd data_processing
+
+# 2) 가상환경 + 패키지 설치
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
+# 3) 접속 정보 설정 → 편집기로 열어 실제 값 입력
+cp .env.example .env
+vi .env
+
+# 4) 동작 확인
+python -c "from data_loader import load_sensor_data; print('OK')"
+```
+
+### Windows (cmd)
+
+```bat
+:: 1) 내려받기
+git clone https://github.lgensol.com/jun-h-hong/data_processing.git
+cd data_processing
+
+:: 2) 가상환경 + 패키지 설치
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+
+:: 3) 접속 정보 설정 → 메모장에서 실제 값 입력 후 저장
+copy .env.example .env
+notepad .env
+
+:: 4) 동작 확인
+python -c "from data_loader import load_sensor_data; print('OK')"
+```
+
+> PowerShell에서는 활성화 명령이 `.venv\Scripts\Activate.ps1`이고, 복사는 `Copy-Item .env.example .env`입니다.
+> GPU 가속(`requirements-gpu.txt`, cuDF)은 **Linux + NVIDIA GPU에서만** 동작합니다.
+
+### 최신 코드로 업데이트
+
+```bash
+cd data_processing
+git pull
+```
+
+`.env`는 Git이 관리하지 않으므로 `git pull`로 덮어써지지 않습니다.
+
+### 다른 프로젝트에서 쓰기
+
+`data_loader.py`를 작업 폴더에 복사하거나, 스크립트/노트북 상단에 경로를 추가합니다.
+
+```python
+import sys
+sys.path.append("/path/to/data_processing")   # Windows: r"C:\path\to\data_processing"
+
+from data_loader import load_sensor_data
+```
+
+> `.env`를 찾는 위치(그 폴더에 없으면 상위 폴더로 올라가며 찾음):
+> - `.py` 스크립트로 실행 → **`data_loader.py`가 있는 폴더**
+> - Jupyter 노트북 / `python -c` / 대화형 셸 → **현재 작업 폴더**
+>
+> 노트북을 다른 폴더에서 열 때는 그 위치에 `.env`를 두거나 `MINIO_*` 환경변수를 직접 설정하세요.
+
 ## 1. 설치
 
 Python 3.10 이상이 필요합니다.
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate                # Windows cmd: .venv\Scripts\activate
 pip install -r requirements.txt          # pandas, pyarrow, minio, zstandard, python-dotenv
 ```
 
-GPU 가속(cuDF)을 쓰려면 `requirements.txt` 대신 아래를 설치합니다.
+GPU 가속(cuDF, Linux 전용)을 쓰려면 `requirements.txt` 대신 아래를 설치합니다.
 
 ```bash
 pip install -r requirements-gpu.txt      # requirements.txt + cudf-cu12
@@ -33,7 +110,7 @@ pip install -r requirements-gpu.txt      # requirements.txt + cudf-cu12
 `.env`는 `.gitignore`에 등록되어 있으므로 **절대 커밋되지 않습니다.**
 
 ```bash
-cp .env.example .env
+cp .env.example .env                     # Windows cmd: copy .env.example .env
 ```
 
 | 변수 | 필수 | 설명 |
@@ -45,7 +122,7 @@ cp .env.example .env
 | `MINIO_SECURE` | | `true`이면 HTTPS 사용 (기본 `false`) |
 | `DATA_LOADER_USE_CUDF_PANDAS` | | `1`이면 cuDF pandas 가속 사용 (아래 6장 참고) |
 
-> `.env`는 모듈을 import할 때 **현재 작업 디렉터리 기준**으로 읽힙니다.
+> `.env`는 모듈을 import할 때 읽힙니다. 찾는 위치는 0장 "다른 프로젝트에서 쓰기"를 참고하세요.
 > 로컬 파일만 읽을 때는 MinIO 설정이 없어도 됩니다.
 
 ## 3. 기본 사용법
