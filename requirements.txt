@@ -1,0 +1,5 @@
+pandas
+pyarrow
+minio
+zstandard
+python-dotenv
