@@ -184,21 +184,35 @@ def _candidate_local_files(
 
 
 def _read_parquet(path: Path) -> pd.DataFrame:
+
     if not str(path).lower().endswith(".zst"):
+
         return pd.read_parquet(path, columns=_RAW_COLUMNS)
-
+ 
     try:
-        import zstandard
-    except ImportError as exc:
-        raise ImportError(
-            "'.parquet.zst' 파일을 읽으려면 zstandard 패키지가 필요합니다."
-        ) from exc
 
+        import zstandard
+
+    except ImportError as exc:
+
+        raise ImportError(
+
+            "'.parquet.zst' 파일을 읽으려면 zstandard 패키지가 필요합니다."
+
+        ) from exc
+ 
     with tempfile.NamedTemporaryFile(suffix=".parquet") as decompressed:
+
         with path.open("rb") as compressed:
+
             zstandard.ZstdDecompressor().copy_stream(compressed, decompressed)
+
         decompressed.flush()
-        return pd.read_parquet(decompressed.name, columns=_RAW_COLUMNS)
+
+        decompressed.seek(0)
+
+        return pd.read_parquet(decompressed, columns=_RAW_COLUMNS)
+ 
 
 
 def _minio_settings(bucket_from_url: str | None) -> tuple[str, str, str, bool, str]:
