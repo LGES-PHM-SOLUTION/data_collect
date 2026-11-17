@@ -173,6 +173,27 @@ sensor_cols = df.columns.drop(["eqp_id", "Sensor Time"])
 df[sensor_cols] = df[sensor_cols].apply(pd.to_numeric, errors="coerce")
 ```
 
+### Jupyter 예제 노트북
+
+[`examples/01_load_sensor_data.ipynb`](examples/01_load_sensor_data.ipynb)에서 전체 흐름을 셀 단위로 실행해 볼 수 있습니다.
+
+| 순서 | 내용 |
+|---|---|
+| 1. 준비 | import 경로 설정, `.env` 설정 여부 확인(값은 표시 안 함) |
+| 2. 조회 조건 | `DATA_PATH`, `EQP_ID`, 기간, 센서 지정 |
+| 3~5 | 불러오기 → 숫자 변환 → 결측 요약·통계·시계열 그래프 |
+| 6. 저장 | `output/<기준일>/<설비ID>_sensor_<시작>-<종료>.parquet` |
+| 7. (참고) | 여러 날을 하루씩 나눠 받아 저장 (메모리 절약) |
+| 8. (참고) | 이미 가진 원본 DataFrame만 변환 |
+
+```bash
+pip install ipykernel matplotlib   # 노트북 실행용 (requirements.txt에는 미포함)
+```
+
+> 2장 셀의 `<버킷>`, `<경로>`, `<설비ID>`를 실제 값으로 바꿔야 실행됩니다.
+> 바꾸지 않으면 안내 오류가 나며 중단됩니다.
+> 노트북은 출력 없이 저장되어 있으며, 실행 결과를 커밋하지 않도록 주의하세요(실제 설비 데이터 노출 방지).
+
 ## 4. 입력 데이터 규칙
 
 ### 원본 parquet 스키마
